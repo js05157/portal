@@ -20,20 +20,22 @@ public class SubjectScore {
     @JoinColumn(name = "score_id", nullable = false)
     private Score score;
 
-    @Column(nullable = false, length = 50)
-    private String subjectName;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String semester;
+    private Subject subject;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Semester semester;
 
     @Column(nullable = false, precision = 5, scale = 2)
     private BigDecimal rawScore;
 
     @Builder
-    public SubjectScore(Score score, String subjectName, String semester, BigDecimal rawScore) {
+    public SubjectScore(Score score, Subject subject, Semester semester, BigDecimal rawScore) {
         this.score = score;
-        this.subjectName = subjectName;
-        this. semester = semester;
+        this.subject = subject;
+        this.semester = semester;
         this.rawScore = rawScore;
     }
 }
