@@ -41,4 +41,13 @@ public class User {
         this.phone = phone;
         this.role = role;
     }
+
+    public void updateProfile(String name, String phone){
+        this.name = name;
+        this.phone = phone;
+    }
+
+    public void changePassword(String encryptedPassword){
+        this.password = encryptedPassword;
+    }
 }
