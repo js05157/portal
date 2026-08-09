@@ -1,5 +1,6 @@
 package com.admission.portal.domain.score.entity;
 
+import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,14 +10,14 @@ import java.math.BigDecimal;
 @Table(name = "subject_score")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
-public class SubjectScore {
+public class SubjectScore extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "subject_score_id")
     private Long id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "score_id", nullable = false)
     private Score score;
 

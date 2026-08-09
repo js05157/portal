@@ -1,6 +1,7 @@
 package com.admission.portal.domain.application.entity;
 
 import com.admission.portal.domain.user.entity.User;
+import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "application")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Application {
+public class Application extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")

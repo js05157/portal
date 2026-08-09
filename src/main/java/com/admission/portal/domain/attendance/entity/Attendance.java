@@ -1,6 +1,7 @@
 package com.admission.portal.domain.attendance.entity;
 
 import com.admission.portal.domain.application.entity.Application;
+import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.math.RoundingMode;
 @Table(name = "attendance")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Attendance {
+public class Attendance extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.admission.portal.domain.score.entity;
 
 import com.admission.portal.domain.application.entity.Application;
+import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import static com.admission.portal.domain.score.entity.Subject.*;
 @Table(name = "score")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Score {
+public class Score extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
