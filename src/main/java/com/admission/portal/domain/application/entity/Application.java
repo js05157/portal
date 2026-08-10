@@ -43,11 +43,12 @@ public class Application extends BaseTimeEntity {
         this.status = status != null ? status : ApplicationStatus.DRAFT;
     }
 
-    public void submit() {
+    public void submit(String examineeNumber) {
         if(this.status == ApplicationStatus.SUBMITTED){
             // TODO: 추후 Service 계층 개발 시 BusinessException(ErrorCode.ALREADY_SUBMITTED)으로 교체
             throw new IllegalStateException("이미 최종 제출된 원서입니다.");
         }
+        this.examineeNumber = examineeNumber;
         this.status = ApplicationStatus.SUBMITTED;
         this.submittedAt = LocalDateTime.now();
     }

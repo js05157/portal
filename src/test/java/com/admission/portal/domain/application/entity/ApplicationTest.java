@@ -23,7 +23,7 @@ class ApplicationTest {
                 .build();
 
         //when
-        application.submit();
+        application.submit("SW-0001");
 
         //then
         assertThat(application.getStatus()).isEqualTo(ApplicationStatus.SUBMITTED);
@@ -42,7 +42,7 @@ class ApplicationTest {
                 .build();
 
         //when & then
-        assertThatThrownBy(application::submit)
+        assertThatThrownBy(() -> application.submit("SW-0001"))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("이미 최종 제출된 원서입니다.");
     }
