@@ -29,14 +29,15 @@ public class SubjectScore extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private Semester semester;
 
-    @Column(nullable = false, precision = 5, scale = 2)
-    private BigDecimal rawScore;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Grade grade;
 
     @Builder
-    public SubjectScore(Score score, Subject subject, Semester semester, BigDecimal rawScore) {
+    public SubjectScore(Score score, Subject subject, Semester semester, Grade grade) {
         this.score = score;
         this.subject = subject;
         this.semester = semester;
-        this.rawScore = rawScore;
+        this.grade = grade;
     }
 }

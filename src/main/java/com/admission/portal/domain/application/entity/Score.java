@@ -64,7 +64,7 @@ public class Score extends BaseTimeEntity {
 
                 Subject subject = subjectScore.getSubject();
                 BigDecimal subjectWeight = BigDecimal.valueOf(subject.getWeight());
-                BigDecimal rawScore = subjectScore.getRawScore();
+                BigDecimal rawScore = BigDecimal.valueOf(subjectScore.getGrade().getScore());
 
                 Semester semester = subjectScore.getSemester();
                 BigDecimal semesterWeight = BigDecimal.valueOf(semester.getWeight());

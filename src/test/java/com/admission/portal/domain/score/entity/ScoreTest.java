@@ -23,7 +23,7 @@ class ScoreTest {
                 .score(score)
                 .subject(Subject.MATH)
                 .semester(Semester.SEMESTER_3_1)
-                .rawScore(BigDecimal.valueOf(100))
+                .grade(Grade.A)
                 .build();
 
         score.getSubjectScores().add(subject1);
