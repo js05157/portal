@@ -1,4 +1,4 @@
-package com.admission.portal.domain.score.entity;
+package com.admission.portal.domain.application.entity;
 
 import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;

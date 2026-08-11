@@ -1,4 +1,4 @@
-package com.admission.portal.domain.result.entity;
+package com.admission.portal.domain.application.entity;
 
 public enum AdmissionStatus {
     PASS,
