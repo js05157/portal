@@ -1,14 +1,12 @@
 package com.admission.portal.domain.score.entity;
 
-import com.admission.portal.domain.application.entity.Application;
-import org.assertj.core.api.Assertions;
+import com.admission.portal.domain.application.entity.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class ScoreTest {
@@ -25,7 +23,7 @@ class ScoreTest {
                 .score(score)
                 .subject(Subject.MATH)
                 .semester(Semester.SEMESTER_3_1)
-                .rawScore(BigDecimal.valueOf(100))
+                .grade(Grade.A)
                 .build();
 
         score.getSubjectScores().add(subject1);

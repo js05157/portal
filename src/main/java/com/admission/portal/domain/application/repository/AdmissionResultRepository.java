@@ -1,6 +1,6 @@
-package com.admission.portal.domain.result.repository;
+package com.admission.portal.domain.application.repository;
 
-import com.admission.portal.domain.result.entity.AdmissionResult;
+import com.admission.portal.domain.application.entity.AdmissionResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

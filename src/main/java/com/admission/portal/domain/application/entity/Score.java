@@ -1,6 +1,5 @@
-package com.admission.portal.domain.score.entity;
+package com.admission.portal.domain.application.entity;
 
-import com.admission.portal.domain.application.entity.Application;
 import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,8 +11,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.admission.portal.domain.score.entity.Subject.*;
 
 @Entity
 @Table(name = "score")
@@ -67,7 +64,7 @@ public class Score extends BaseTimeEntity {
 
                 Subject subject = subjectScore.getSubject();
                 BigDecimal subjectWeight = BigDecimal.valueOf(subject.getWeight());
-                BigDecimal rawScore = subjectScore.getRawScore();
+                BigDecimal rawScore = BigDecimal.valueOf(subjectScore.getGrade().getScore());
 
                 Semester semester = subjectScore.getSemester();
                 BigDecimal semesterWeight = BigDecimal.valueOf(semester.getWeight());

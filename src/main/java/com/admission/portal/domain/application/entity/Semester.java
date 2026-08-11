@@ -1,4 +1,4 @@
-package com.admission.portal.domain.score.entity;
+package com.admission.portal.domain.application.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

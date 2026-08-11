@@ -1,6 +1,5 @@
-package com.admission.portal.domain.attendance.entity;
+package com.admission.portal.domain.application.entity;
 
-import com.admission.portal.domain.application.entity.Application;
 import com.admission.portal.global.common.entitiy.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

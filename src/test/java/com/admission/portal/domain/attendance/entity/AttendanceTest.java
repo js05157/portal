@@ -1,14 +1,13 @@
 package com.admission.portal.domain.attendance.entity;
 
 import com.admission.portal.domain.application.entity.Application;
-import org.assertj.core.api.Assertions;
+import com.admission.portal.domain.application.entity.Attendance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class AttendanceTest {

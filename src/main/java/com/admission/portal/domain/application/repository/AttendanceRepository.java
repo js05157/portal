@@ -1,6 +1,6 @@
-package com.admission.portal.domain.attendance.repository;
+package com.admission.portal.domain.application.repository;
 
-import com.admission.portal.domain.attendance.entity.Attendance;
+import com.admission.portal.domain.application.entity.Attendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

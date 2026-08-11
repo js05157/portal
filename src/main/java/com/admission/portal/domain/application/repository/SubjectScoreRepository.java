@@ -1,6 +1,6 @@
-package com.admission.portal.domain.score.repository;
+package com.admission.portal.domain.application.repository;
 
-import com.admission.portal.domain.score.entity.SubjectScore;
+import com.admission.portal.domain.application.entity.SubjectScore;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
