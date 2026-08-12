@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "subject_score")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SubjectScore extends BaseTimeEntity {
 
     @Id
