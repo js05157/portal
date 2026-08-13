@@ -1,6 +1,5 @@
-package com.admission.portal.domain.score.entity;
+package com.admission.portal.domain.application.entity;
 
-import com.admission.portal.domain.application.entity.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

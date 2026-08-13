@@ -1,7 +1,5 @@
-package com.admission.portal.domain.attendance.entity;
+package com.admission.portal.domain.application.entity;
 
-import com.admission.portal.domain.application.entity.Application;
-import com.admission.portal.domain.application.entity.Attendance;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

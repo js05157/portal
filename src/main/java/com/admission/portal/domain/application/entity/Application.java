@@ -2,6 +2,8 @@ package com.admission.portal.domain.application.entity;
 
 import com.admission.portal.domain.user.entity.User;
 import com.admission.portal.global.common.entitiy.BaseTimeEntity;
+import com.admission.portal.global.error.BusinessException;
+import com.admission.portal.global.error.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -45,8 +47,7 @@ public class Application extends BaseTimeEntity {
 
     public void submit(String examineeNumber) {
         if(this.status == ApplicationStatus.SUBMITTED){
-            // TODO: 추후 Service 계층 개발 시 BusinessException(ErrorCode.ALREADY_SUBMITTED)으로 교체
-            throw new IllegalStateException("이미 최종 제출된 원서입니다.");
+            throw new BusinessException(ErrorCode.ALREADY_SUBMITTED);
         }
         this.examineeNumber = examineeNumber;
         this.status = ApplicationStatus.SUBMITTED;
