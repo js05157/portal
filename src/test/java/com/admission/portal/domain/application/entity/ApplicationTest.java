@@ -1,6 +1,8 @@
 package com.admission.portal.domain.application.entity;
 
 import com.admission.portal.domain.user.entity.User;
+import com.admission.portal.global.error.BusinessException;
+import com.admission.portal.global.error.ErrorCode;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +45,7 @@ class ApplicationTest {
 
         //when & then
         assertThatThrownBy(() -> application.submit("SW-0001"))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("이미 최종 제출된 원서입니다.");
+                .isInstanceOf(BusinessException.class)
+                .hasMessage(ErrorCode.ALREADY_SUBMITTED.getMessage());
     }
 }
