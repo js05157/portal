@@ -29,8 +29,9 @@ public class Application extends BaseTimeEntity {
     @Column(unique = true, length = 20)
     private String examineeNumber;
 
-    @Column(nullable = false, length = 30)
-    private String major;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private Major major;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -39,9 +40,8 @@ public class Application extends BaseTimeEntity {
     private LocalDateTime submittedAt;
 
     @Builder
-    public Application(User user, String major, ApplicationStatus status) {
+    public Application(User user, ApplicationStatus status) {
         this.user = user;
-        this.major = major;
         this.status = status != null ? status : ApplicationStatus.DRAFT;
     }
 
@@ -52,5 +52,9 @@ public class Application extends BaseTimeEntity {
         this.examineeNumber = examineeNumber;
         this.status = ApplicationStatus.SUBMITTED;
         this.submittedAt = LocalDateTime.now();
+    }
+
+    public void updateMajor(Major major) {
+        this.major = major;
     }
 }

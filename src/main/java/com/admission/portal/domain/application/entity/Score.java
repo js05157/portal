@@ -40,22 +40,13 @@ public class Score extends BaseTimeEntity {
     private BigDecimal totalScore;
 
     @Builder
-    public Score(Application application, BigDecimal gpaScore, BigDecimal absenceScore, BigDecimal totalScore){
+    public Score(Application application){
         this.application = application;
-        this.gpaScore = gpaScore;
-        this.absenceScore = absenceScore;
-        this.totalScore = totalScore;
     }
 
-    public void updateScores(BigDecimal gpaScore, BigDecimal absenceScore) {
-        this.gpaScore = gpaScore;
-        this.absenceScore = absenceScore;
-        this.totalScore = gpaScore.add(absenceScore);
-    }
-
-    public void calculateGpaScore() {
+    public BigDecimal calculateGpaScore() {
         if (this.subjectScores.isEmpty()) {
-            this.gpaScore = BigDecimal.ZERO;
+            return BigDecimal.ZERO;
         } else {
 
             BigDecimal totalWeightedScore = BigDecimal.ZERO;
@@ -77,24 +68,28 @@ public class Score extends BaseTimeEntity {
             }
 
             if(totalWeight.compareTo(BigDecimal.ZERO) == 0){
-                this.gpaScore = BigDecimal.ZERO;
+                return BigDecimal.ZERO;
             } else {
                 BigDecimal gpaAverage = totalWeightedScore.divide(totalWeight, 4, RoundingMode.HALF_UP);
-                this.gpaScore = gpaAverage.multiply(new BigDecimal("0.8")).setScale(2, RoundingMode.HALF_UP);
+                return gpaAverage.multiply(new BigDecimal("0.8")).setScale(2, RoundingMode.HALF_UP);
             }
         }
-        calculateTotalScore();
+    }
+
+    public BigDecimal calculateTotalScore() {
+        BigDecimal gpa = (this.gpaScore != null) ? this.gpaScore : BigDecimal.ZERO;
+        BigDecimal absence = (this.absenceScore != null) ? this.absenceScore : BigDecimal.ZERO;
+
+        return gpa.add(absence);
     }
 
     public void updateAbsenceScore(BigDecimal absenceScore) {
         this.absenceScore = (absenceScore != null) ? absenceScore : BigDecimal.ZERO;
-        calculateTotalScore();
+        this.totalScore = calculateTotalScore();
     }
 
-    public void calculateTotalScore() {
-        BigDecimal gpa = (this.gpaScore != null) ? this.gpaScore : BigDecimal.ZERO;
-        BigDecimal absence = (this.absenceScore != null) ? this.absenceScore : BigDecimal.ZERO;
-
-        this.totalScore = gpa.add(absence);
+    public void updateGpaScore(BigDecimal gpaScore){
+        this.gpaScore = (gpaScore != null) ? gpaScore : BigDecimal.ZERO;
+        this.totalScore = calculateTotalScore();
     }
 }

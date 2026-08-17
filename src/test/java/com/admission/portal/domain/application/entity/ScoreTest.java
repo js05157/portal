@@ -28,7 +28,7 @@ class ScoreTest {
         score.getSubjectScores().add(subject1);
 
         //when
-        score.calculateGpaScore();
+        score.updateGpaScore(score.calculateGpaScore());
 
         //then
         assertThat(score.getGpaScore()).isEqualTo(new BigDecimal("80.00"));
@@ -41,8 +41,8 @@ class ScoreTest {
         //given
         Score score = Score.builder()
                 .application(mock(Application.class))
-                .gpaScore(new BigDecimal("80.00"))
                 .build();
+        score.updateGpaScore(new BigDecimal("80.00"));
 
         //when
         score.updateAbsenceScore(new BigDecimal("18.50"));

@@ -1,5 +1,6 @@
 package com.admission.portal.domain.application.dto.request;
 
+import com.admission.portal.domain.application.entity.Major;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationSaveRequest {
-    private String major;
+    private Major major;
     private AttendanceRequest attendance;
     private ScoreRequest score;
 }

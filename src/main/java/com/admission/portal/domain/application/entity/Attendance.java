@@ -42,6 +42,12 @@ public class Attendance extends BaseTimeEntity {
         this.earlyLeaveCnt = earlyLeaveCnt;
     }
 
+    public void updateAttendance(int absenceCnt, int tardinessCnt, int earlyLeaveCnt) {
+        this.absenceCnt = absenceCnt;
+        this.tardinessCnt = tardinessCnt;
+        this.earlyLeaveCnt = earlyLeaveCnt;
+    }
+
     public BigDecimal calculateAttendanceScore() {
         int convertedAbsenceDays = this.absenceCnt + (this.tardinessCnt + this.earlyLeaveCnt) / 3;
 

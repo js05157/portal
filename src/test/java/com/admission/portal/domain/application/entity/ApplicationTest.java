@@ -20,7 +20,6 @@ class ApplicationTest {
         User mockUser = mock(User.class);
         Application application = Application.builder()
                 .user(mockUser)
-                .major("소프트웨어과")
                 .status(ApplicationStatus.DRAFT)
                 .build();
 
@@ -39,7 +38,6 @@ class ApplicationTest {
         User mockUser = mock(User.class);
         Application application = Application.builder()
                 .user(mockUser)
-                .major("소프트웨어과")
                 .status(ApplicationStatus.SUBMITTED)
                 .build();
 
