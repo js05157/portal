@@ -1,6 +1,7 @@
 package com.admission.portal.domain.application.controller;
 
 import com.admission.portal.domain.application.dto.request.ApplicationSaveRequest;
+import com.admission.portal.domain.application.dto.response.ApplicationDetailResponse;
 import com.admission.portal.domain.application.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController {
 
     private final ApplicationService applicationService;
+
+    @GetMapping("/me")
+    public ResponseEntity<ApplicationDetailResponse> getMyApplication(@RequestParam Long userId) {
+        return applicationService.getMyApplication(userId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
+    }
 
     @PostMapping
     public ResponseEntity<Void> saveDraft(

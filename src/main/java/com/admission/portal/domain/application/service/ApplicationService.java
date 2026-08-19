@@ -3,6 +3,7 @@ package com.admission.portal.domain.application.service;
 import com.admission.portal.domain.application.dto.request.ApplicationSaveRequest;
 import com.admission.portal.domain.application.dto.request.AttendanceRequest;
 import com.admission.portal.domain.application.dto.request.SubjectScoreRequest;
+import com.admission.portal.domain.application.dto.response.ApplicationDetailResponse;
 import com.admission.portal.domain.application.entity.*;
 import com.admission.portal.domain.application.repository.ApplicationRepository;
 import com.admission.portal.domain.application.repository.AttendanceRepository;
@@ -14,6 +15,8 @@ import com.admission.portal.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +40,9 @@ public class ApplicationService {
         application.submit(examineeNumber);
     }
 
-    @Transactional
-    public Application saveOrUpdate(Long userId, ApplicationSaveRequest request){
+    private Application saveOrUpdate(Long userId, ApplicationSaveRequest request){
         Application application = applicationRepository.findByUserId(userId)
-                .orElseGet(() -> createApplication(userId, request));
+                .orElseGet(() -> createApplication(userId));
 
         application.updateMajor(request.getMajor());
 
@@ -71,7 +73,7 @@ public class ApplicationService {
         return application;
     }
 
-    private Application createApplication(Long userId, ApplicationSaveRequest request) {
+    private Application createApplication(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
@@ -97,5 +99,18 @@ public class ApplicationService {
                 .application(application)
                 .build()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ApplicationDetailResponse> getMyApplication(Long userId) {
+        return applicationRepository.findByUserId(userId)
+                .map(application -> {
+                    Attendance attendance = attendanceRepository.findByApplicationId(application.getId())
+                            .orElseThrow(() -> new BusinessException(ErrorCode.APPLICATION_NOT_FOUND));
+                    Score score = scoreRepository.findByApplicationId(application.getId())
+                            .orElseThrow(() -> new BusinessException(ErrorCode.APPLICATION_NOT_FOUND));
+
+                    return ApplicationDetailResponse.of(application, attendance, score);
+                });
     }
 }
