@@ -25,24 +25,21 @@ public class Attendance extends BaseTimeEntity {
     @JoinColumn(name = "application_id", nullable = false, unique = true)
     private Application application;
 
-    @Column(nullable = false)
-    private int absenceCnt;
+    private Integer absenceCnt;
 
-    @Column(nullable = false)
-    private int tardinessCnt;
+    private Integer tardinessCnt;
 
-    @Column(nullable = false)
-    private int earlyLeaveCnt;
+    private Integer earlyLeaveCnt;
 
     @Builder
-    public Attendance (Application application, int absenceCnt, int tardinessCnt, int earlyLeaveCnt){
+    public Attendance (Application application, Integer absenceCnt, Integer tardinessCnt, Integer earlyLeaveCnt){
         this.application = application;
         this.absenceCnt = absenceCnt;
         this.tardinessCnt = tardinessCnt;
         this.earlyLeaveCnt = earlyLeaveCnt;
     }
 
-    public void updateAttendance(int absenceCnt, int tardinessCnt, int earlyLeaveCnt) {
+    public void updateAttendance(Integer absenceCnt, Integer tardinessCnt, Integer earlyLeaveCnt) {
         this.absenceCnt = absenceCnt;
         this.tardinessCnt = tardinessCnt;
         this.earlyLeaveCnt = earlyLeaveCnt;

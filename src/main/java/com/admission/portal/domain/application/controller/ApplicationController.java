@@ -3,6 +3,7 @@ package com.admission.portal.domain.application.controller;
 import com.admission.portal.domain.application.dto.request.ApplicationSaveRequest;
 import com.admission.portal.domain.application.dto.response.ApplicationDetailResponse;
 import com.admission.portal.domain.application.service.ApplicationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ApplicationController {
     @PostMapping
     public ResponseEntity<Void> saveDraft(
             @RequestParam Long userId,
-            @RequestBody ApplicationSaveRequest request
+            @RequestBody @Valid ApplicationSaveRequest request
     ) {
         applicationService.saveDraft(userId, request);
         return ResponseEntity.noContent().build();
@@ -33,7 +34,7 @@ public class ApplicationController {
     @PostMapping("/submit")
     public ResponseEntity<Void> submit(
             @RequestParam Long userId,
-            @RequestBody ApplicationSaveRequest request
+            @RequestBody @Valid ApplicationSaveRequest request
     ) {
         applicationService.submit(userId, request);
         return ResponseEntity.noContent().build();
