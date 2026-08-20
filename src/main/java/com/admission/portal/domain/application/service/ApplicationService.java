@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,19 +28,50 @@ public class ApplicationService {
 
     @Transactional
     public void saveDraft(Long userId, ApplicationSaveRequest request) {
-        saveOrUpdate(userId, request);
+        saveOrUpdate(userId, request, false);
     }
 
     @Transactional
     public void submit(Long userId, ApplicationSaveRequest request){
-        Application application = saveOrUpdate(userId, request);
+        validateForSubmit(request);
+
+        Application application = saveOrUpdate(userId, request, true);
 
         long currentSubmittedCount = applicationRepository.countByMajorAndStatus(application.getMajor(), ApplicationStatus.SUBMITTED);
         String examineeNumber = String.format("%s-%04d", application.getMajor(), currentSubmittedCount + 1);
         application.submit(examineeNumber);
     }
 
-    private Application saveOrUpdate(Long userId, ApplicationSaveRequest request){
+    private void validateForSubmit(ApplicationSaveRequest request) {
+        if (request.getMajor() == null) {
+            throw new BusinessException(ErrorCode.MAJOR_REQUIRED);
+        }
+
+        AttendanceRequest attendance = request.getAttendance();
+        if (attendance == null
+                || attendance.getAbsenceCnt() == null
+                || attendance.getTardinessCnt() == null
+                || attendance.getEarlyLeaveCnt() == null) {
+            throw new BusinessException(ErrorCode.ATTENDANCE_REQUIRED);
+        }
+
+        List<SubjectScoreRequest> subjectScores = request.getScore().getSubjectScoreRequestList();
+        Set<String> submitted = new HashSet<>();
+        for (SubjectScoreRequest s : subjectScores) {
+            submitted.add(s.getSemester().name() + "-" + s.getSubject().name());
+        }
+
+        for (Semester semester : EnumSet.allOf(Semester.class)) {
+            for (Subject subject : EnumSet.allOf(Subject.class)) {
+                if (!submitted.contains(semester.name() + "-" + subject.name())) {
+                    throw new BusinessException(ErrorCode.SUBJECT_SCORE_INCOMPLETE);
+                }
+            }
+        }
+    }
+
+
+    private Application saveOrUpdate(Long userId, ApplicationSaveRequest request, boolean calculateScore){
         Application application = applicationRepository.findByUserId(userId)
                 .orElseGet(() -> createApplication(userId));
 
@@ -67,10 +98,24 @@ public class ApplicationService {
             );
         }
 
-        score.updateGpaScore(score.calculateGpaScore());
-        score.updateAbsenceScore(attendance.calculateAttendanceScore());
-
+        if (calculateScore) {
+            score.updateGpaScore(score.calculateGpaScore());
+            score.updateAbsenceScore(attendance.calculateAttendanceScore());
+        }
         return application;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ApplicationDetailResponse> getMyApplication(Long userId) {
+        return applicationRepository.findByUserId(userId)
+                .map(application -> {
+                    Attendance attendance = attendanceRepository.findByApplicationId(application.getId())
+                            .orElseThrow(() -> new BusinessException(ErrorCode.APPLICATION_NOT_FOUND));
+                    Score score = scoreRepository.findByApplicationId(application.getId())
+                            .orElseThrow(() -> new BusinessException(ErrorCode.APPLICATION_NOT_FOUND));
+
+                    return ApplicationDetailResponse.of(application, attendance, score);
+                });
     }
 
     private Application createApplication(Long userId) {
@@ -87,9 +132,9 @@ public class ApplicationService {
     private Attendance createAttendance(Application application) {
         return attendanceRepository.save(Attendance.builder()
                 .application(application)
-                .absenceCnt(0)
-                .tardinessCnt(0)
-                .earlyLeaveCnt(0)
+                .absenceCnt(null)
+                .tardinessCnt(null)
+                .earlyLeaveCnt(null)
                 .build()
         );
     }
@@ -101,16 +146,5 @@ public class ApplicationService {
         );
     }
 
-    @Transactional(readOnly = true)
-    public Optional<ApplicationDetailResponse> getMyApplication(Long userId) {
-        return applicationRepository.findByUserId(userId)
-                .map(application -> {
-                    Attendance attendance = attendanceRepository.findByApplicationId(application.getId())
-                            .orElseThrow(() -> new BusinessException(ErrorCode.APPLICATION_NOT_FOUND));
-                    Score score = scoreRepository.findByApplicationId(application.getId())
-                            .orElseThrow(() -> new BusinessException(ErrorCode.APPLICATION_NOT_FOUND));
 
-                    return ApplicationDetailResponse.of(application, attendance, score);
-                });
-    }
 }
