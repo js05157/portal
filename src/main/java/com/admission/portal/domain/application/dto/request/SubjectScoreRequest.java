@@ -7,11 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class SubjectScoreRequest {
-    private Semester semester;
-    private Subject subject;
-    private Grade grade;
-}
+public record SubjectScoreRequest(
+        Semester semester,
+        Subject subject,
+        Grade grade
+) {}

@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ScoreRequest {
-    private List<SubjectScoreRequest> subjectScoreRequestList;
-}
+public record ScoreRequest(
+        List<SubjectScoreRequest> subjectScoreRequestList
+) {}
