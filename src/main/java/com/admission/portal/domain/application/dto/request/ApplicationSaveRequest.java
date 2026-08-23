@@ -7,14 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ApplicationSaveRequest {
-    private Major major;
-    @Valid
-    @NotNull
-    private AttendanceRequest attendance;
-    @NotNull
-    private ScoreRequest score;
-}
+public record ApplicationSaveRequest(
+        Major major,
+        @Valid @NotNull AttendanceRequest attendance,
+        @NotNull ScoreRequest score
+) {}

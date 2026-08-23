@@ -43,22 +43,22 @@ public class ApplicationService {
     }
 
     private void validateForSubmit(ApplicationSaveRequest request) {
-        if (request.getMajor() == null) {
+        if (request.major() == null) {
             throw new BusinessException(ErrorCode.MAJOR_REQUIRED);
         }
 
-        AttendanceRequest attendance = request.getAttendance();
+        AttendanceRequest attendance = request.attendance();
         if (attendance == null
-                || attendance.getAbsenceCnt() == null
-                || attendance.getTardinessCnt() == null
-                || attendance.getEarlyLeaveCnt() == null) {
+                || attendance.absenceCnt() == null
+                || attendance.tardinessCnt() == null
+                || attendance.earlyLeaveCnt() == null) {
             throw new BusinessException(ErrorCode.ATTENDANCE_REQUIRED);
         }
 
-        List<SubjectScoreRequest> subjectScores = request.getScore().getSubjectScoreRequestList();
+        List<SubjectScoreRequest> subjectScores = request.score().subjectScoreRequestList();
         Set<String> submitted = new HashSet<>();
         for (SubjectScoreRequest s : subjectScores) {
-            submitted.add(s.getSemester().name() + "-" + s.getSubject().name());
+            submitted.add(s.semester().name() + "-" + s.subject().name());
         }
 
         for (Semester semester : EnumSet.allOf(Semester.class)) {
@@ -75,25 +75,25 @@ public class ApplicationService {
         Application application = applicationRepository.findByUserId(userId)
                 .orElseGet(() -> createApplication(userId));
 
-        application.updateMajor(request.getMajor());
+        application.updateMajor(request.major());
 
         Attendance attendance = attendanceRepository.findByApplicationId(application.getId())
                 .orElseGet(() -> createAttendance(application));
 
-        AttendanceRequest attendanceRequest = request.getAttendance();
-        attendance.updateAttendance(attendanceRequest.getAbsenceCnt(), attendanceRequest.getTardinessCnt(), attendanceRequest.getEarlyLeaveCnt());
+        AttendanceRequest attendanceRequest = request.attendance();
+        attendance.updateAttendance(attendanceRequest.absenceCnt(), attendanceRequest.tardinessCnt(), attendanceRequest.earlyLeaveCnt());
 
         Score score = scoreRepository.findByApplicationId(application.getId())
                 .orElseGet(() -> createScore(application));
 
         score.getSubjectScores().clear();
-        for(SubjectScoreRequest s : request.getScore().getSubjectScoreRequestList()) {
+        for(SubjectScoreRequest s : request.score().subjectScoreRequestList()) {
             score.getSubjectScores().add(
                     SubjectScore.builder()
                             .score(score)
-                            .subject(s.getSubject())
-                            .semester(s.getSemester())
-                            .grade(s.getGrade())
+                            .subject(s.subject())
+                            .semester(s.semester())
+                            .grade(s.grade())
                             .build()
             );
         }
