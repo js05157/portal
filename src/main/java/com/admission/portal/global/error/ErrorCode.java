@@ -15,7 +15,10 @@ public enum ErrorCode {
     MAJOR_REQUIRED(HttpStatus.BAD_REQUEST, "전공을 선택해야 제출할 수 있습니다."),
     ATTENDANCE_REQUIRED(HttpStatus.BAD_REQUEST, "출결 정보를 모두 입력해야 제출할 수 있습니다."),
     SUBJECT_SCORE_INCOMPLETE(HttpStatus.BAD_REQUEST, "모든 학기, 과목의 성적을 입력해야 제출할 수 있습니다."),
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다.");
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."),
+    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
+    DUPLICATE_PHONE(HttpStatus.CONFLICT, "이미 사용 중인 연락처입니다.");
+
 
     private final HttpStatus status;
     private final String message;
