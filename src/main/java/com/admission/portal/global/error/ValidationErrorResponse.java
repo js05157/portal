@@ -21,5 +21,4 @@ public record ValidationErrorResponse(
             return new ValidationFieldError(fieldError.getField(), fieldError.getDefaultMessage());
         }
     }
-
 }
