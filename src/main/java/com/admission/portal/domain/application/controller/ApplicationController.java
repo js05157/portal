@@ -6,6 +6,7 @@ import com.admission.portal.domain.application.service.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +17,7 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApplicationDetailResponse> getMyApplication(@RequestParam Long userId) {
+    public ResponseEntity<ApplicationDetailResponse> getMyApplication(@AuthenticationPrincipal Long userId) {
         return applicationService.getMyApplication(userId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.noContent().build());
@@ -24,7 +25,7 @@ public class ApplicationController {
 
     @PostMapping
     public ResponseEntity<Void> saveDraft(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal Long userId,
             @RequestBody @Valid ApplicationSaveRequest request
     ) {
         applicationService.saveDraft(userId, request);
@@ -33,7 +34,7 @@ public class ApplicationController {
 
     @PostMapping("/submit")
     public ResponseEntity<Void> submit(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal Long userId,
             @RequestBody @Valid ApplicationSaveRequest request
     ) {
         applicationService.submit(userId, request);
