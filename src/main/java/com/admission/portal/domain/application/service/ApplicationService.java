@@ -58,6 +58,9 @@ public class ApplicationService {
         List<SubjectScoreRequest> subjectScores = request.score().subjectScoreRequestList();
         Set<String> submitted = new HashSet<>();
         for (SubjectScoreRequest s : subjectScores) {
+            if (s.grade() == null) {
+                continue;
+            }
             submitted.add(s.semester().name() + "-" + s.subject().name());
         }
 

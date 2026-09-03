@@ -30,7 +30,6 @@ public class SubjectScore extends BaseTimeEntity {
     private Semester semester;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Grade grade;
 
     @Builder

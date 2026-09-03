@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public record ApplicationSaveRequest(
         Major major,
         @Valid @NotNull AttendanceRequest attendance,
-        @NotNull ScoreRequest score
+        @Valid @NotNull ScoreRequest score
 ) {}
