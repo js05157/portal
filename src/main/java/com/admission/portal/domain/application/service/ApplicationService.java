@@ -37,7 +37,8 @@ public class ApplicationService {
 
         Application application = saveOrUpdate(userId, request, true);
 
-        long currentSubmittedCount = applicationRepository.countByMajorAndStatus(application.getMajor(), ApplicationStatus.SUBMITTED);
+        //long currentSubmittedCount = applicationRepository.countByMajorAndStatus(application.getMajor(), ApplicationStatus.SUBMITTED);
+        long currentSubmittedCount = applicationRepository.countByMajorAndStatusForUpdate(application.getMajor(), ApplicationStatus.SUBMITTED);
         String examineeNumber = String.format("%s-%04d", application.getMajor(), currentSubmittedCount + 1);
         application.submit(examineeNumber);
     }
