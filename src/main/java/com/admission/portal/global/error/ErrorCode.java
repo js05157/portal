@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 원서입니다."),
     ALREADY_SUBMITTED(HttpStatus.CONFLICT, "이미 최종 제출된 원서입니다."),
+    EXAMINEE_NUMBER_SEQUENCE_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "수험번호 채번 정보를 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     ALREADY_HAS_APPLICATION(HttpStatus.CONFLICT, "이미 작성한 원서가 존재합니다."),
     MAJOR_REQUIRED(HttpStatus.BAD_REQUEST, "전공을 선택해야 제출할 수 있습니다."),

@@ -71,14 +71,59 @@ class ApplicationServiceTest {
 
     private ApplicationSaveRequest buildRequest() {
         AttendanceRequest attendanceRequest = new AttendanceRequest(0, 0, 0);
-        SubjectScoreRequest subjectScoreRequest = new SubjectScoreRequest(Semester.SEMESTER_3_1, Subject.MATH, Grade.A);
-        ScoreRequest scoreRequest = new ScoreRequest(List.of(subjectScoreRequest));
+
+        List<SubjectScoreRequest> subjectScoreRequestList = new ArrayList<>();
+        for (Semester semester : Semester.values()) {
+            for (Subject subject : Subject.values()) {
+                subjectScoreRequestList.add(new SubjectScoreRequest(semester, subject, Grade.A));
+            }
+        }
+
+        ScoreRequest scoreRequest = new ScoreRequest(subjectScoreRequestList);
         return new ApplicationSaveRequest(Major.SOFTWARE, attendanceRequest, scoreRequest);
     }
 
+//    @Test
+//    @DisplayName("동시성 이슈 발생: 100명이 동시에 제출하면 수험번호가 중복 발급된다.")
+//    void submit_concurrency_issue() throws InterruptedException {
+//        int threadCount = 100;
+//        ExecutorService executorService = Executors.newFixedThreadPool(32);
+//        CountDownLatch latch = new CountDownLatch(threadCount);
+//
+//        List<Long> failedUserIds = java.util.Collections.synchronizedList(new ArrayList<>());
+//
+//        for (Long userId : userIds) {
+//            executorService.submit(() -> {
+//                try {
+//                    applicationService.submit(userId, buildRequest());
+//                } catch (Exception e) {
+//                    failedUserIds.add(userId);
+//                } finally {
+//                    latch.countDown();
+//                }
+//            });
+//        }
+//
+//        latch.await();
+//
+//        List<String> issuedExamineeNumbers = applicationRepository.findAll().stream()
+//                .map(a -> a.getExamineeNumber())
+//                .filter(n -> n != null)
+//                .toList();
+//
+//        long uniqueCount = issuedExamineeNumbers.stream().distinct().count();
+//
+//        System.out.println("=========================================");
+//        System.out.println("발급된 전체 수험번호 수: " + issuedExamineeNumbers.size());
+//        System.out.println("중복을 제거한 고유 수험번호 수: " + uniqueCount);
+//        System.out.println("=========================================");
+//
+//        assertThat(failedUserIds.size()).isGreaterThan(0);
+//    }
+
     @Test
-    @DisplayName("동시성 이슈 발생: 100명이 동시에 제출하면 수험번호가 중복 발급된다.")
-    void submit_concurrency_issue() throws InterruptedException {
+    @DisplayName("동시성 제어 적용 후: 100명이 동시에 제출해도 수험번호가 중복 발급되지 않는다.")
+    void submit_concurrency_resolved() throws InterruptedException {
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -109,9 +154,10 @@ class ApplicationServiceTest {
         System.out.println("=========================================");
         System.out.println("발급된 전체 수험번호 수: " + issuedExamineeNumbers.size());
         System.out.println("중복을 제거한 고유 수험번호 수: " + uniqueCount);
+        System.out.println("실패한 요청 수: " + failedUserIds.size());
         System.out.println("=========================================");
 
-        assertThat(failedUserIds.size()).isGreaterThan(0);
+        assertThat(uniqueCount).isEqualTo(issuedExamineeNumbers.size());
     }
 
     @Test

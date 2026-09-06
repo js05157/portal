@@ -6,6 +6,7 @@ import com.admission.portal.domain.application.dto.request.SubjectScoreRequest;
 import com.admission.portal.domain.application.dto.response.ApplicationDetailResponse;
 import com.admission.portal.domain.application.entity.*;
 import com.admission.portal.domain.application.repository.ApplicationRepository;
+import com.admission.portal.domain.application.repository.ExamineeNumberSequenceRepository;
 import com.admission.portal.domain.application.repository.AttendanceRepository;
 import com.admission.portal.domain.application.repository.ScoreRepository;
 import com.admission.portal.domain.user.entity.User;
@@ -25,6 +26,7 @@ public class ApplicationService {
     private final UserRepository userRepository;
     private final AttendanceRepository attendanceRepository;
     private final ScoreRepository scoreRepository;
+    private final ExamineeNumberSequenceRepository examineeNumberSequenceRepository;
 
     @Transactional
     public void saveDraft(Long userId, ApplicationSaveRequest request) {
@@ -37,10 +39,18 @@ public class ApplicationService {
 
         Application application = saveOrUpdate(userId, request, true);
 
-        //long currentSubmittedCount = applicationRepository.countByMajorAndStatus(application.getMajor(), ApplicationStatus.SUBMITTED);
-        long currentSubmittedCount = applicationRepository.countByMajorAndStatusForUpdate(application.getMajor(), ApplicationStatus.SUBMITTED);
-        String examineeNumber = String.format("%s-%04d", application.getMajor(), currentSubmittedCount + 1);
-        application.submit(examineeNumber);
+        if (application.getStatus() == ApplicationStatus.SUBMITTED) {
+            throw new BusinessException(ErrorCode.ALREADY_SUBMITTED);
+        }
+
+        application.submit(issueExamineeNumber(application.getMajor()));
+    }
+
+    private String issueExamineeNumber(Major major) {
+        ExamineeNumberSequence sequence = examineeNumberSequenceRepository.findByMajorForUpdate(major)
+                .orElseThrow(() -> new BusinessException(ErrorCode.EXAMINEE_NUMBER_SEQUENCE_NOT_FOUND));
+
+        return String.format("%s-%04d", major, sequence.issueNext());
     }
 
     private void validateForSubmit(ApplicationSaveRequest request) {
